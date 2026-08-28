@@ -1,6 +1,7 @@
 """
 Módulo para generación y exportación del reporte HTML final
 """
+import json
 from dashboard_builder import DashboardBuilder
 
 class InteractiveReporter:
@@ -9,10 +10,10 @@ class InteractiveReporter:
         self.builder = DashboardBuilder(analyzer)
 
     def build_dashboard_html(self, output_path: str):
-        """Renderiza el gráfico dinámico en una plantilla HTML modularizada."""
-        fig, len_df_base = self.builder.create_sales_chart()
+        fig, counts = self.builder.create_sales_chart()
         div_chart = fig.to_html(full_html=False, include_plotlyjs='cdn', div_id="sales_plotly_div")
-        base_height = max(500, len_df_base * 28)
+        
+        counts_json = json.dumps(counts)
 
         html_template = f"""<!DOCTYPE html>
 <html lang="es">
@@ -20,7 +21,6 @@ class InteractiveReporter:
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reporte Interactivo de Ventas</title>
-    <!-- Vinculación con assets/css/styles.css -->
     <link rel="stylesheet" href="../assets/css/styles.css">
 </head>
 <body>
@@ -29,12 +29,16 @@ class InteractiveReporter:
         
         <div class="filter-container">
             <span class="filter-label">🔍 Seleccionar Categoría / Vista:</span>
-            <select id="categorySelector" class="filter-select" onchange="switchView(this.value, {base_height})">
+            <select id="categorySelector" class="filter-select" onchange='switchView(this.value, {counts_json})'>
                 <option value="0">📊 Top 20 General</option>
                 <option value="1">🥗 Solo Platos Principales (Sin *Extra)</option>
                 <option value="2">🧀 Solo Ingredientes y Acompañamientos (*Extra)</option>
-                <option value="3">🥩 Solo Categoría Base</option>
-                <option value="4">📋 Top 50 General</option>
+                <option value="3">🥩 Categoría: Base / Proteínas</option>
+                <option value="4">🌱 Categoría: Granos / Legumbres</option>
+                <option value="5">🥦 Categoría: Verduras</option>
+                <option value="6">🌰 Categoría: Toppings</option>
+                <option value="7">🥫 Categoría: Salsas</option>
+                <option value="8">📋 Top 50 General</option>
             </select>
         </div>
 
@@ -43,7 +47,6 @@ class InteractiveReporter:
         </div>
     </div>
 
-    <!-- Vinculación con assets/js/dashboard.js -->
     <script src="../assets/js/dashboard.js"></script>
 </body>
 </html>"""

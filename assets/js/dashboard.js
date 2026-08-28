@@ -1,32 +1,43 @@
-function switchView(selectedIndex, baseHeight) {
+function switchView(selectedIndex, counts) {
     const chartDiv = document.getElementById('sales_plotly_div');
     if (!chartDiv) return;
 
     const idx = parseInt(selectedIndex);
+    const totalTraces = 9;
 
-    // Visibilidad de trazas: Top20, SinExtras, SoloExtras, SoloBase, Top50
-    const visibilityMap = [
-        [true, false, false, false, false],  // Top 20 General
-        [false, true, false, false, false],  // Sin Extras
-        [false, false, true, false, false],  // Solo Extras
-        [false, false, false, true, false],  // Solo Base
-        [false, false, false, false, true]   // Top 50
-    ];
+    // Crear mapa de visibilidad booleano
+    const visibilityMap = Array(totalTraces).fill(false);
+    visibilityMap[idx] = true;
 
     const titles = [
         "<b>Top 20 Productos Más Vendidos</b>",
         "<b>Top 20 Platos Principales (Excluye *Extra)</b>",
         "<b>Top 20 Ingredientes e Extras Más Vendidos</b>",
-        "<b>Ventas de Productos de la Categoría Base</b>",
+        "<b>Ventas de Categoría: Base / Proteínas</b>",
+        "<b>Ventas de Categoría: Granos / Legumbres</b>",
+        "<b>Ventas de Categoría: Verduras</b>",
+        "<b>Ventas de Categoría: Toppings</b>",
+        "<b>Ventas de Categoría: Salsas</b>",
         "<b>Top 50 Productos Más Vendidos</b>"
     ];
 
-    const heights = [600, 600, 600, baseHeight || 600, 1100];
+    // Cálculo dinámico de altura para que las barras nunca se aprieten
+    const calcHeight = (count, minH = 500) => Math.max(minH, (count || 10) * 28);
 
-    // Actualiza visibilidad
-    Plotly.restyle(chartDiv, { visible: visibilityMap[idx] });
+    const heights = [
+        600,
+        600,
+        600,
+        calcHeight(counts.base),
+        calcHeight(counts.granos),
+        calcHeight(counts.verduras),
+        calcHeight(counts.toppings),
+        calcHeight(counts.salsas),
+        1100
+    ];
 
-    // Actualiza layout
+    Plotly.restyle(chartDiv, { visible: visibilityMap });
+
     Plotly.relayout(chartDiv, {
         'title.text': titles[idx],
         'height': heights[idx]

@@ -1,9 +1,8 @@
 """
 Módulo de Catálogo y Categorización de Productos
-Permite definir y gestionar listas de productos por categorías dinámicas.
+Define las categorías del menú interactivo para filtrado dinámico.
 """
 
-# Lista de productos considerados como 'Base'
 PRODUCTOS_BASE = [
     "Pollo a la plancha",
     "Pollo a la plancha teriyaki",
@@ -28,6 +27,66 @@ PRODUCTOS_BASE = [
     "Mixto. Carne mechada y pollo a la plancha con chimichurri peruano."
 ]
 
-# Espacio listo para agregar futuras categorías:
-# PRODUCTOS_BEBIDAS = [...]
-# PRODUCTOS_POSTRES = [...]
+PRODUCTOS_GRANOS_LEGUMBRES = [
+    "Hummus de Garbanzos",
+    "Hummus de betarraga",
+    "Arroz integral",
+    "Arroz blanco",
+    "Quínoa Tricolor",
+    "Sin granos",
+    "Porotos negros"
+]
+
+PRODUCTOS_VERDURAS = [
+    "Cebolla morada",
+    "Champiñones",
+    "PALTA",
+    "Cebolla caramelizada",
+    "Mix de Lechuga",
+    "Choclo",
+    "Tomate",
+    "Ají verde",
+    "Pepino",
+    "Brocoli",
+    "Zanahoria",
+    "Verduras salteadas",
+    "Guacamole",
+    "Ensalada chilena",
+    "Pimentones asados",
+    "Sin Verduras",
+    "Coleslaw",
+    "Repollo morado",
+    "Betarraga rallada"
+]
+
+PRODUCTOS_TOPPINGS = [
+    "Aceitunas negras laminadas",
+    "Queso mozzarella",
+    "Almendras molidas",
+    "Nueces molidas",
+    "Sin Toppins",
+    "Mani molido"
+]
+
+PRODUCTOS_SALSAS = [
+    "Salsa teriyaki",
+    "Set de Sal y Limón",
+    "Ajo vegana",
+    "Ciboulette vegana",
+    "MAYO STREET VEGANA",
+    "Mostaza miel",
+    "Ají chipotle vegana",
+    "Sour cream",
+    "BBQ",
+    "Ketchup",
+    "Aderezo Balsamico",
+    "Mayo Vegana",
+    "Sweet Onion",
+    "Salsa tailandesa de aji dulce",
+    "Salsa de mani picante",
+    "Salsa Acevichada",
+    "Rodaja de Limón",
+    "Salsa Cesar",
+    "2 IGUALES",
+    "SIN SALSAS"
+]
