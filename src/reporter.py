@@ -1,8 +1,7 @@
 """
 Módulo para generación y exportación del reporte HTML final
 """
-import json
-from dashboard_builder import DashboardBuilder
+from src.dashboard_builder import DashboardBuilder
 
 class InteractiveReporter:
     def __init__(self, analyzer):
@@ -10,19 +9,29 @@ class InteractiveReporter:
         self.builder = DashboardBuilder(analyzer)
 
     def build_dashboard_html(self, output_path: str):
-        fig, counts = self.builder.create_sales_chart()
-        div_chart = fig.to_html(full_html=False, include_plotlyjs='cdn', div_id="sales_plotly_div")
+        fig, _ = self.builder.create_sales_chart()
         
-        counts_json = json.dumps(counts)
+        # Configuración de Plotly para activar responsividad nativa
+        plotly_config = {
+            'responsive': True,
+            'displayModeBar': False  # Opcional: oculta la barra de herramientas molesta en móviles
+        }
 
-        # Rutas actualizadas desde la raíz: assets/css/ y assets/js/
+        div_chart = fig.to_html(
+            full_html=False, 
+            include_plotlyjs=False, 
+            div_id="sales_plotly_div",
+            config=plotly_config
+        )
+
         html_template = f"""<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Reporte Interactivo de Ventas 2026</title>
     <link rel="stylesheet" href="assets/css/styles.css">
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
 </head>
 <body>
     <div class="container">
@@ -30,7 +39,7 @@ class InteractiveReporter:
         
         <div class="filter-container">
             <span class="filter-label">🔍 Seleccionar Categoría / Vista:</span>
-            <select id="categorySelector" class="filter-select" onchange='switchView(this.value, {counts_json})'>
+            <select id="categorySelector" class="filter-select" onchange="switchView(this.value)">
                 <option value="0">📊 Top 20 General</option>
                 <option value="1">🥗 Solo Platos Principales (Sin *Extra)</option>
                 <option value="2">🧀 Solo Ingredientes y Acompañamientos (*Extra)</option>
