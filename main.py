@@ -27,9 +27,9 @@ def main():
     print("\n--- TOP 10 PRODUCTOS MÁS VENDIDOS ---")
     print(top_10.to_string(index=False))
 
-    # 3. Generar el reporte interactivo en HTML
+    # 3. Generar el reporte HTML con TODOS los productos en la lista
     reporter = InteractiveReporter(analyzer)
-    reporter.build_dashboard_html(OUTPUT_HTML_REPORT, top_n=20)
+    reporter.build_dashboard_html(OUTPUT_HTML_REPORT)
 
     print(f"\n[OK] Reporte generado exitosamente en: {OUTPUT_HTML_REPORT}")
     print("=== PROCESO FINALIZADO ===")
