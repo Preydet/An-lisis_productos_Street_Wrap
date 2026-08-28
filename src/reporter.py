@@ -15,13 +15,14 @@ class InteractiveReporter:
         
         counts_json = json.dumps(counts)
 
+        # Rutas actualizadas desde la raíz: assets/css/ y assets/js/
         html_template = f"""<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reporte Interactivo de Ventas 2026</title>
-    <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
     <div class="container">
@@ -47,7 +48,7 @@ class InteractiveReporter:
         </div>
     </div>
 
-    <script src="../assets/js/dashboard.js"></script>
+    <script src="assets/js/dashboard.js"></script>
 </body>
 </html>"""
 
