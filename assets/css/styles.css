@@ -19,7 +19,7 @@ body {
     flex-direction: column;
     height: auto !important;
     min-height: fit-content;
-    overflow: hidden; /* Garantiza que nada se salga visualmente de los bordes redondeados */
+    overflow: hidden;
 }
 
 h1 {
@@ -29,6 +29,48 @@ h1 {
     margin-bottom: 25px;
     font-size: 26px;
     font-weight: 700;
+}
+
+/* Tarjeta KPI */
+.kpi-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.kpi-card {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    color: #ffffff;
+    padding: 16px 28px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 4px 12px rgba(30, 60, 114, 0.2);
+    min-width: 280px;
+}
+
+.kpi-icon {
+    font-size: 30px;
+}
+
+.kpi-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.kpi-label {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0.9;
+    font-weight: 600;
+}
+
+.kpi-value {
+    font-size: 26px;
+    font-weight: 800;
+    line-height: 1.2;
 }
 
 .filter-container {
@@ -68,7 +110,6 @@ h1 {
     box-shadow: 0 0 0 3px rgba(30, 60, 114, 0.15);
 }
 
-/* Envoltorio del gráfico adaptativo */
 .chart-wrapper {
     width: 100%;
     height: auto;
@@ -78,13 +119,11 @@ h1 {
     box-sizing: border-box;
 }
 
-/* Fuerza al DIV generado por Plotly a respetar al padre */
 #sales_plotly_div {
     width: 100% !important;
     max-width: 100%;
 }
 
-/* Reglas responsivas */
 @media (max-width: 768px) {
     body {
         padding: 12px 8px;
@@ -99,5 +138,10 @@ h1 {
         align-items: stretch;
         padding: 12px;
         gap: 8px;
+    }
+    
+    .kpi-card {
+        width: 100%;
+        justify-content: center;
     }
 }

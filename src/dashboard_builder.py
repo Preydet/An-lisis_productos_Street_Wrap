@@ -10,14 +10,11 @@ from product_categories import (
     PRODUCTOS_SALSAS
 )
 
+TOTAL_ORDENES = 11617
+
 def acortar_texto(texto, idx, max_chars=35):
-    """
-    Acorta el texto e inyecta un espacio invisible de ancho cero (Zero-Width Space)
-    basado en el índice para garantízar que cada etiqueta sea 100% única en el eje Y.
-    """
     str_t = str(texto).strip()
     corta = str_t[:max_chars - 3] + '...' if len(str_t) > max_chars else str_t
-    # \u200b es un carácter invisible que evita la colisión de nombres iguales en Plotly
     return corta + ('\u200b' * idx)
 
 class DashboardBuilder:
@@ -33,7 +30,6 @@ class DashboardBuilder:
             )
             filtered = filtered[mask]
         
-        # Agrupar y ordenar estrictamente de MENOR a MAYOR
         grouped = (filtered.groupby('Producto', as_index=False)['Cantidad_Vendida']
                    .sum()
                    .sort_values(by='Cantidad_Vendida', ascending=True))
@@ -76,7 +72,10 @@ class DashboardBuilder:
             x_vals = df['Cantidad_Vendida'].tolist() if not df.empty else []
             y_raw = df['Producto'].tolist() if not df.empty else []
             
-            # Generar etiquetas con caracteres invisibles únicos para evitar nombres duplicados
+            # Calcular porcentaje sobre 11,617 órdenes
+            pct_vals = [(cant / TOTAL_ORDENES) * 100 for cant in x_vals]
+            text_labels = [f" {cant:,} ({pct:.1f}%)" if cant > 0 else "" for cant, pct in zip(x_vals, pct_vals)]
+            
             y_unique_short = [acortar_texto(p, idx) for idx, p in enumerate(y_raw)]
 
             fig.add_trace(go.Bar(
@@ -84,12 +83,15 @@ class DashboardBuilder:
                 y=y_unique_short,
                 orientation='h',
                 visible=(i == 0),
-                customdata=y_raw,
+                text=text_labels,
+                textposition='outside',
+                cliponaxis=False,  # Permite que las etiquetas se muestren aunque la barra sea muy corta
+                customdata=list(zip(y_raw, pct_vals)),
                 marker=dict(
                     color=x_vals if x_vals else None, 
                     colorscale=scale
                 ),
-                hovertemplate="<b>%{customdata}</b><br>Cantidad: %{x:,}<extra></extra>"
+                hovertemplate="<b>%{customdata[0]}</b><br>Cantidad: %{x:,} unidades<br>Presencia en Órdenes: <b>%{customdata[1]:.1f}%</b><extra></extra>"
             ))
 
         fig.update_layout(
@@ -100,13 +102,14 @@ class DashboardBuilder:
             xaxis=dict(title="Unidades Vendidas"),
             yaxis=dict(
                 type='category',
-                categoryorder='array',  # Mantiene de forma estricta el orden indexado de los arrays de Python
+                categoryorder='array',
                 automargin=True
             ),
-            margin=dict(l=220, r=40, t=50, b=50)
+            margin=dict(l=220, r=120, t=50, b=50) # Margen derecho ampliado a 120px para dar espacio al texto
         )
 
         counts = {
+            'total_ordenes': TOTAL_ORDENES,
             'base': len(df_base),
             'granos': len(df_granos),
             'verduras': len(df_verduras),
