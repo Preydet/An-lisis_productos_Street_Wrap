@@ -1,0 +1,28 @@
+# Entornos virtuales (Virtual Environments)
+.venv/
+venv/
+env/
+ENV/
+
+# Archivos de caché de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+
+# Carpetas de configuración de VSC y editores
+.vscode/
+.idea/
+
+# Datos pesados o temporales (Opcional: Descomenta si no quieres subir datos a GitHub)
+data/*.csv
+data/*.xlsx
+
+# Archivos de salida generados por el reporte
+output/*.html
+output/*.pdf
+
+# Archivos de sistema operativo
+.DS_Store
+Thumbs.db
