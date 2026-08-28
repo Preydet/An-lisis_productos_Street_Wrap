@@ -14,16 +14,7 @@ const TITULOS_VISTAS = [
 ];
 
 /**
- * Recorta textos largos para evitar desbordamientos
- */
-function acortarTexto(texto, maxCaracteres) {
-    if (!texto) return '';
-    const str = String(texto);
-    return str.length > maxCaracteres ? str.substring(0, maxCaracteres - 3) + '...' : str;
-}
-
-/**
- * Alterna la vista seleccionada de forma segura
+ * Alterna la vista activa de Plotly y redimensiona dinámicamente el contenedor
  */
 function switchView(selectedIndex) {
     const chartDiv = document.getElementById('sales_plotly_div');
@@ -31,48 +22,40 @@ function switchView(selectedIndex) {
 
     const idx = parseInt(selectedIndex, 10) || 0;
     const totalTraces = chartDiv.data.length;
-
-    // 1. Crear mapa booleano de visibilidad
-    const visibilityMap = new Array(totalTraces).fill(false);
     const targetIdx = (idx >= 0 && idx < totalTraces) ? idx : 0;
+
+    // 1. Mostrar únicamente la traza seleccionada
+    const visibilityMap = new Array(totalTraces).fill(false);
     visibilityMap[targetIdx] = true;
 
-    // 2. Obtener la traza activa
+    // 2. Ajustar altura dinámicamente según la cantidad de ítems
     const activeTrace = chartDiv.data[targetIdx];
     const itemCount = activeTrace && activeTrace.y ? activeTrace.y.length : 10;
-
-    // 3. Truncar nombres largos si no han sido procesados
     const isMobile = window.innerWidth <= 600;
-    const maxChars = isMobile ? 22 : 35;
+    
+    // Asignación de px por barra para dar espacio suficiente a listas largas como Top 50
+    const pxPorBarra = isMobile ? 28 : 32;
+    const paddingExtra = 100; // Margen para títulos y eje X
+    const targetHeight = Math.max(isMobile ? 450 : 500, (itemCount * pxPorBarra) + paddingExtra);
 
-    if (activeTrace && activeTrace.y) {
-        if (!activeTrace._labelsOriginales) {
-            activeTrace._labelsOriginales = [...activeTrace.y];
-        }
-        activeTrace.y = activeTrace._labelsOriginales.map(label => acortarTexto(label, maxChars));
-    }
-
-    // 4. Calcular altura adecuada por cantidad de barras
-    const pxPorBarra = isMobile ? 26 : 30;
-    const targetHeight = Math.max(isMobile ? 450 : 500, itemCount * pxPorBarra);
-
-    // 5. Aplicar cambios a Plotly
+    // 3. Aplicar cambios en Plotly
     Plotly.restyle(chartDiv, { visible: visibilityMap });
 
     Plotly.relayout(chartDiv, {
         'title.text': TITULOS_VISTAS[targetIdx] || TITULOS_VISTAS[0],
         'height': targetHeight,
         'autosize': true,
-        'margin.l': isMobile ? 140 : 250,
+        'margin.l': isMobile ? 140 : 220,
         'margin.r': 30,
         'margin.t': 50,
-        'margin.b': 50,
-        'yaxis.automargin': true,
-        'xaxis.automargin': true
+        'margin.b': 50
+    }).then(() => {
+        // Fuerza a Plotly a re-calcular límites del canvas sin requerir zoom manual
+        Plotly.Plots.resize(chartDiv);
     });
 }
 
-// Redimensionar responsivamente
+// Escuchar cambios de tamaño de ventana de forma adaptativa
 window.addEventListener('resize', function () {
     const selector = document.getElementById('categorySelector');
     if (selector) {

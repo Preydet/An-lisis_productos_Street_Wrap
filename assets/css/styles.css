@@ -15,6 +15,11 @@ body {
     border-radius: 12px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    height: auto !important;
+    min-height: fit-content;
+    overflow: hidden; /* Garantiza que nada se salga visualmente de los bordes redondeados */
 }
 
 h1 {
@@ -63,13 +68,23 @@ h1 {
     box-shadow: 0 0 0 3px rgba(30, 60, 114, 0.15);
 }
 
+/* Envoltorio del gráfico adaptativo */
 .chart-wrapper {
     width: 100%;
-    min-height: 450px;
+    height: auto;
+    min-height: 500px;
+    display: block;
     position: relative;
+    box-sizing: border-box;
 }
 
-/* Reglas responsivas para Smartphones y Tablets */
+/* Fuerza al DIV generado por Plotly a respetar al padre */
+#sales_plotly_div {
+    width: 100% !important;
+    max-width: 100%;
+}
+
+/* Reglas responsivas */
 @media (max-width: 768px) {
     body {
         padding: 12px 8px;
@@ -77,12 +92,6 @@ h1 {
 
     .container {
         padding: 16px 12px;
-        border-radius: 8px;
-    }
-
-    h1 {
-        font-size: 20px;
-        margin-bottom: 18px;
     }
 
     .filter-container {
@@ -90,14 +99,5 @@ h1 {
         align-items: stretch;
         padding: 12px;
         gap: 8px;
-    }
-
-    .filter-label {
-        white-space: normal;
-    }
-
-    .filter-select {
-        font-size: 13px;
-        padding: 8px 10px;
     }
 }
