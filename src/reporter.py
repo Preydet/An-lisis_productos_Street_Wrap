@@ -20,12 +20,12 @@ class InteractiveReporter:
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reporte Interactivo de Ventas</title>
+    <title>Reporte Interactivo de Ventas 2026</title>
     <link rel="stylesheet" href="../assets/css/styles.css">
 </head>
 <body>
     <div class="container">
-        <h1>📦 Reporte Interactivo de Ventas por Producto</h1>
+        <h1>📦 Reporte Interactivo de Ventas 2026</h1>
         
         <div class="filter-container">
             <span class="filter-label">🔍 Seleccionar Categoría / Vista:</span>
